@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,6 +8,8 @@ namespace Menus
 {
     public class ReadFile : MonoBehaviour
     {
+        public string FILE_NAME = "layer";
+        public string FILE_TYPE = ".txt";
         public GenerateGraph generator;
 
         public void LoadFile()
@@ -17,8 +21,9 @@ namespace Menus
 
         private Map generateMap(string[] files)
         {
+            var sorted = sort(files);
             var map = new Map();
-            foreach (var file in files)
+            foreach (var file in sorted)
             {
                 var layer = new Layer();
                 var contents = File.ReadAllLines(file);
@@ -35,6 +40,25 @@ namespace Menus
                 map.layers.Add(layer);
             }
             return map;
+        }
+
+        private List<string> sort(string[] unsorted)
+        {
+            var dictionary = new Dictionary<int, string>();
+            foreach (var item in unsorted)
+            {
+                var number = findNumber(item);
+                dictionary.Add(number, item);
+            }
+            var sorted = dictionary.OrderBy(x => x.Key);
+            return sorted.ToList().ConvertAll(x => x.Value);
+        }
+
+        private int findNumber(string path)
+        {
+            var index = path.IndexOf(FILE_NAME);
+            var fileName = path.Substring(index, path.Length - index);
+            return int.Parse(fileName.Replace(FILE_NAME, "").Replace(FILE_TYPE, ""));
         }
     }
 }
