@@ -27,7 +27,7 @@ namespace Menus
             foreach (var file in sorted)
             {
                 var layer = new Layer();
-                var contents = File.ReadAllLines(file);
+                var contents = File.ReadAllLines(file.Value);
                 for (var i = 0; i < contents.Length; ++i)
                 {
                     var points = contents[i].Split('\t');
@@ -43,7 +43,7 @@ namespace Menus
             return map;
         }
 
-        private List<string> sort(string[] unsorted)
+        private IOrderedEnumerable<KeyValuePair<int, string>> sort(string[] unsorted)
         {
             var dictionary = new Dictionary<int, string>();
             foreach (var item in unsorted)
@@ -51,8 +51,8 @@ namespace Menus
                 var number = findNumber(item);
                 dictionary.Add(number, item);
             }
-            var sorted = dictionary.OrderBy(x => x.Key);
-            return sorted.ToList().ConvertAll(x => x.Value);
+            return dictionary.OrderBy(x => x.Key);
+            //return sorted.ToList().ConvertAll(x => x.Value);
         }
 
         private int findNumber(string path)
