@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine;
 
 namespace Menus
 {
     public class ReadFile : MonoBehaviour
     {
+        public string directoryPath;
         public string FILE_NAME = "layer";
         public string FILE_TYPE = ".txt";
         public GenerateGraph generator;
 
         public void LoadFile()
         {
-            var directoryPath = EditorUtility.OpenFolderPanel("Select folder with AL Map files", "", "");
+            //var directoryPath = EditorUtility.OpenFolderPanel("Select folder with AL Map files", "", "");
             var files = Directory.GetFiles(directoryPath);
             generator.Generate(generateMap(files));
         }
